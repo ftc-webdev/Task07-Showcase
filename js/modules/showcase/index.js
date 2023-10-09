@@ -1,6 +1,7 @@
 'use strict'
 
 import { cssInit, insertCSS } from "/js/modules/css.js"
+import { modalInit, openModal } from '/js/modules/modal/index.js'
 
 let imgListPopover  // popover wrapper, define it here, init it somewhere else
 let showcaseImage   // img tag, define it here, init it somewhere else
@@ -39,12 +40,10 @@ const showcaseRightArrowClickHandler = (ev) => {
 const renderShowcaseImage = () => {
     let html = ""
     html += `
-        <div id="showcase-image-container" class="showcase-popover showcase-hidden">
             <button id="showcase-image-close">X</button>
             <img id="showcase-left-arrow" src="/img/slider-controls/left-arrow.png" />
             <img id="showcase-image" class="showcase-image"/>
             <img id="showcase-right-arrow" src="/img/slider-controls/right-arrow.png" />
-            </div>    
     `
     return html
 
@@ -62,11 +61,18 @@ const displayImages = (imgListContainerId, imgList, imgFolder = "") => {
     })
 
     html += "</div>"
+    html += `
+        <div id="showcase-image-container" class="showcase-popover showcase-hidden">
+            <!-- renderShowcaseImage()  contents will go here -->
+        </div>
+    `
+    // html += renderShowcaseImage()
 
-    html += renderShowcaseImage()
 
     const imgListContainer = document.getElementById(imgListContainerId)
     imgListContainer.innerHTML = html
+
+    modalInit("showcase-image-container", renderShowcaseImage())
 
     const showcaseContainer = document.getElementById("showcase-container")
     showcaseContainer.addEventListener("click", thumbnailClickHandler)
